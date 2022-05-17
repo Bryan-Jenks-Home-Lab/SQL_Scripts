@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>SSIS Metrics Report</Title>
+<Shortcut></Shortcut>
+<Description>Spit out all the queries to give me my view into the SSIS metrics.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+</Declarations>
+<Code Language="SQL"><![CDATA[
+PRINT 'METRICS.lkp.SSIS_Package_list'
+SELECT * FROM METRICS.lkp.SSIS_Package_list
+PRINT 'METRICS.app.SSIS_metric'
+SELECT * FROM METRICS.app.SSIS_metric
+PRINT 'METRICS.rpt.SSIS_error_rate'
+SELECT * FROM METRICS.rpt.SSIS_error_rate
+PRINT 'METRICS.rpt.SSIS_Operating_time'
+SELECT * FROM METRICS.rpt.SSIS_Operating_time
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Email Reminder</Title>
+<Shortcut></Shortcut>
+<Description>Create a new scheduled email using email microservice table</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+<!-- 	<ID>EMAIL_PROFILE</ID>
+	<ToolTip>The email profile that will send the message</ToolTip>
+	<Default>mailer</Default>
+	
+	<ID>RECIPIENTS</ID>
+	<ToolTip>The email email TO field</ToolTip>
+	<Default>RECIPIENT_LIST</Default>
+
+	<ID>SUBJECT</ID>
+	<ToolTip>The subject line of the email</ToolTip>
+	<Default>SUBJECT</Default>
+	
+	<ID>BODY</ID>
+	<ToolTip>The body of the email message</ToolTip>
+	<Default>BODY</Default>
+	
+	<ID>FORMAT</ID>
+	<ToolTip>The format of the email either 'TEXT' or 'HTML'</ToolTip>
+	<Default>HTML</Default>
+	
+	<ID>IMPORTANCE</ID>
+	<ToolTip>The importance of the email, default is 'Normal', options are also 'High' or 'Low'</ToolTip>
+	<Default>Normal</Default>
+	
+	<ID>SENSITIVITY</ID>
+	<ToolTip>The Sensitivity of the email  Defaults to 'Normal' additional options are 'Personal', 'Private', or 'Confidential'</ToolTip>
+	<Default>Normal</Default>
+	
+	<ID>DATE</ID>
+	<ToolTip>The ISO Date to send your email in YYYY-MM-DD format</ToolTip>
+	<Default>DATE</Default>
+	
+	<ID>TIME</ID>
+	<ToolTip>The Time to send the email in military time format as a 4 character integer e.g. 0700 or 1630 using increments of 15 minutes for scheduling</ToolTip>
+	<Default>HHmm</Default> -->
+</Literal>
+</Declarations>
+<Code Language="SQL"><![CDATA[INSERT INTO ADMINISTRATION.dbo.Mail_Queue
+VALUES (
+    '<Profile Name,NVARCHAR(255),mailer>',
+    '<TO,NVARCHAR(1000),>',
+    <CC,NVARCHAR(1000),NULL>,
+    <BCC,NVARCHAR(1000),NULL>,
+    '<Subject,NVARCHAR(255),>',
+    '<Body,NVARCHAR(4000),>',
+    '<Format,NVARCHAR(4),HTML>',
+    '<Importance,NVARCHAR(6),Normal>',
+    '<Sensitivity,NVARCHAR(12),Normal>',
+    '<ISO Date,DATE,>',
+    '<Time,NVARCHAR(4),>',
+    DEFAULT, NULL, NULL, NULL, NULL
+);
+GO$end$]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

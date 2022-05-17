@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Eschew Metrics Report</Title>
+<Shortcut></Shortcut>
+<Description>Spit out all the queries to give me my view view into Eschew's metrics.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+</Declarations>
+<Code Language="SQL"><![CDATA[
+SELECT * FROM METRICS.usr.Eschew_Dev_Time 
+SELECT * FROM METRICS.app.eschew_metric
+SELECT * FROM METRICS.rpt.Eschew_Execution
+SELECT * FROM METRICS.rpt.Eschew_Statistic
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

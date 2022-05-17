@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Information Schema Columns</Title>
+<Shortcut></Shortcut>
+<Description>Spit out all the data about a table from the information schema.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+	<ID>DATABASE_NAME</ID>
+	<ToolTip>The name of the target database</ToolTip>
+	<Default>DATABASE_TO_SEARCH</Default>
+</Literal>
+<Literal>
+	<ID>SCHEMA_NAME</ID>
+	<ToolTip>The name of the source schema</ToolTip>
+	<Default>SCHEMA_TO_SEARCH</Default>
+</Literal>
+<Literal>
+	<ID>TABLE_NAME</ID>
+	<ToolTip>The name of the table to move</ToolTip>
+	<Default>TABLE_TO_SEARCH</Default>
+</Literal>
+</Declarations>
+<Code Language="SQL"><![CDATA[USE $DATABASE_NAME$;
+GO
+SELECT *
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE 1 = 1
+--AND TABLE_SCHEMA = N'$SCHEMA_NAME$'
+--AND TABLE_NAME = N'$TABLE_TO_SEARCH$'
+ORDER BY 
+TABLE_CATALOG,
+TABLE_SCHEMA,
+TABLE_NAME,
+ORDINAL_POSITION
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

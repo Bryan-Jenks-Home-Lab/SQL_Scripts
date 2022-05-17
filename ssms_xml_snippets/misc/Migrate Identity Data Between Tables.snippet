@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Migrate Identity Data Between Tables</Title>
+<Shortcut></Shortcut>
+<Description>Moves all data from one table to another that has an identical schema. Identity insert is turned on so that identity columns don't throw errors.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+	<ID>TargetDB</ID>
+	<ToolTip>The database that data is going INTO</ToolTip>
+	<Default>Target_Database</Default>
+</Literal>
+<Literal>
+	<ID>TargetSchema</ID>
+	<ToolTip>The_schema of the database table that data is going INTO</ToolTip>
+	<Default>dbo</Default>
+</Literal>
+<Literal>
+	<ID>TargetTbl</ID>
+	<ToolTip>The table that data is going INTO</ToolTip>
+	<Default>Target_Table</Default>
+</Literal>
+<Literal>
+	<ID>SourceDB</ID>
+	<ToolTip>The database that data is coming FROM</ToolTip>
+	<Default>Source_Database</Default>
+</Literal>
+<Literal>
+	<ID>SourceSchema</ID>
+    <ToolTip>The schema of the database table that data is coming FROM</ToolTip>
+    <Default>dbo</Default>
+</Literal>
+<Literal>
+	<ID>SourceTbl</ID>
+	<ToolTip>The table that data is coming FROM</ToolTip>
+	<Default>Source_Table</Default>
+</Literal>
+</Declarations>
+<Code Language="SQL"><![CDATA[
+SET IDENTITY_INSERT $TargetDB$.$TargetSchema$.$TargetTbl$ ON;
+
+INSERT INTO $TargetDB$.$TargetSchema$.$TargetTbl$ ($end$)
+SELECT * FROM $SourceDB$.$SourceSchema$.$SourceTbl$;
+
+SET IDENTITY_INSERT $TargetDB$.$TargetSchema$.$TargetTbl$ OFF;
+
+GO
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

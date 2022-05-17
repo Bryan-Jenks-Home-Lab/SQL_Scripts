@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Add Metadata Fields and Trigger</Title>
+<Shortcut></Shortcut>
+<Description>Add all the standard metadata fields to an existing table along with the update trigger</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+	<ID></ID>
+	<ToolTip></ToolTip>
+	<Default></Default>
+</Literal>
+</Declarations>
+<Code Language="SQL"><![CDATA[USE <Database,Database,>;
+GO
+
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Date_Created] [datetime2](7) NULL;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Who_Created] [nvarchar](255) NULL;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Date_Updated] [datetime2](7) NULL;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Who_Updated] [nvarchar](255) NULL;
+GO
+
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Date_Archived] [datetime2](7) NULL;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Who_Archived] [nvarchar](255) NULL;
+GO
+
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Is_Archived] BIT NULL;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,>
+ADD [Comment] [nvarchar](1000) NULL;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,> ADD CONSTRAINT [DF_<Table, Table,>_Is_Archived] DEFAULT ((0)) FOR Is_Archived;
+GO
+
+ALTER TABLE <Schema, Schema,>.<Table, Table,> ADD CONSTRAINT [DF_<Table, Table,>_Date_Created] DEFAULT (getdate()) FOR Date_Created;
+GO
+
+ALTER TABLE <Schema, Schema,>.<Table, Table,> ADD CONSTRAINT [DF_<Table, Table,>_Who_Created] DEFAULT (suser_sname()) FOR Who_Created;
+GO
+ 
+ 
+CREATE TRIGGER <Schema, Schema,>.[TR_<Table, Table,>_Updated]
+   ON <Schema, Schema,>.<Table, Table,>
+   AFTER UPDATE
+AS
+BEGIN
+       -- SET NOCOUNT ON added to prevent extra result sets from
+       -- interfering with SELECT statements.
+       SET NOCOUNT ON;
+ 
+    UPDATE <Schema, Schema,>.<Table, Table,>
+    SET Date_Updated = GETDATE(),
+        Who_Updated = SYSTEM_USER
+    WHERE [ID] IN (SELECT [ID] FROM inserted)
+
+    IF (SELECT [Is_Archived] FROM inserted) = 1
+    BEGIN
+    UPDATE <Schema, Schema,>.<Table, Table,>
+    SET Date_Archived = GETDATE(),
+        Who_Archived = SYSTEM_USER
+    WHERE [ID] IN (SELECT [ID] FROM inserted)
+    END
+
+END;
+GO
+ 
+ALTER TABLE <Schema, Schema,>.<Table, Table,> ENABLE TRIGGER [TR_<Table, Table,>_Updated];
+GO$end$]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

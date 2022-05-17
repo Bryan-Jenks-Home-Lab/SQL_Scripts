@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Ticketer Metrics Report</Title>
+<Shortcut></Shortcut>
+<Description>Spit out all the queries to give me my view view into ticketer's metrics.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+</Declarations>
+<Code Language="SQL"><![CDATA[
+SELECT * FROM [METRICS].usr.Ticketer_Dev_Time
+SELECT * FROM [METRICS].app.Ticketer_Metric
+SELECT * FROM [METRICS].rpt.Ticketer_Daily
+SELECT * FROM [METRICS].rpt.Ticketer_Weekly
+SELECT * FROM [METRICS].rpt.Ticketer_Monthly
+SELECT * FROM [METRICS].rpt.Ticketer_Annually
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

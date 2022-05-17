@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Create Table</Title>
+<Shortcut></Shortcut>
+<Description>Add all the standard metadata fields to a Create Table Script</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+	<ID></ID>
+	<ToolTip></ToolTip>
+	<Default></Default>
+</Literal>
+</Declarations>
+<Code Language="SQL"><![CDATA[USE <Database,SYSNAME,>;
+GO
+
+CREATE TABLE <Schema,SYSNAME,>.<Table,SYSNAME,> (
+    [ID] INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
+    -----------------------------
+    -- ADDITIONAL COLUMNS HERE --
+    -----------------------------
+    [Date_Created] [datetime2](7) NULL,
+    [Who_Created] [nvarchar](255) NULL,
+    [Date_Updated] [datetime2](7) NULL,
+    [Who_Updated] [nvarchar](255) NULL,
+    [Date_Archived] [datetime2](7) NULL,
+    [Who_Archived] [nvarchar](255) NULL,
+    [Is_Archived] BIT NULL,
+    [Comment] [nvarchar](1000) NULL
+);
+ 
+ALTER TABLE <Schema,SYSNAME,>.<Table,SYSNAME,> ADD CONSTRAINT [DF_<Table,SYSNAME,>_Is_Archived] DEFAULT ((0)) FOR Is_Archived;
+ALTER TABLE <Schema,SYSNAME,>.<Table,SYSNAME,> ADD CONSTRAINT [DF_<Table,SYSNAME,>_Date_Created] DEFAULT (getdate()) FOR Date_Created;
+ALTER TABLE <Schema,SYSNAME,>.<Table,SYSNAME,> ADD CONSTRAINT [DF_<Table,SYSNAME,>_Who_Created] DEFAULT (suser_sname()) FOR Who_Created;
+GO
+ 
+ 
+CREATE TRIGGER <Schema,SYSNAME,>.[TR_<Table,SYSNAME,>_Updated]
+   ON <Schema,SYSNAME,>.<Table,SYSNAME,>
+   AFTER UPDATE
+AS
+BEGIN
+       -- SET NOCOUNT ON added to prevent extra result sets from
+       -- interfering with SELECT statements.
+       SET NOCOUNT ON;
+ 
+    UPDATE <Schema,SYSNAME,>.<Table,SYSNAME,>
+    SET Date_Updated = GETDATE(),
+        Who_Updated = SYSTEM_USER
+    WHERE [ID] IN (SELECT [ID] FROM inserted)
+
+    IF (SELECT [Is_Archived] FROM inserted) = 1
+    BEGIN
+    UPDATE <Schema,SYSNAME,>.<Table,SYSNAME,>
+    SET Date_Archived = GETDATE(),
+        Who_Archived = SYSTEM_USER
+    WHERE [ID] IN (SELECT [ID] FROM inserted)
+    END
+
+END;
+GO
+ 
+ALTER TABLE <Schema,SYSNAME,>.<Table,SYSNAME,> ENABLE TRIGGER [TR_<Table,SYSNAME,>_Updated];
+GO
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

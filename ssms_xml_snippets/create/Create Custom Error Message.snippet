@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Create Custom Error Message</Title>
+<Shortcut></Shortcut>
+<Description>Allows querying of sysmessages table to allow for a custom error message to be created and used.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+	<ID>ERROR_MESSAGE</ID>
+	<ToolTip>The content of the error message</ToolTip>
+	<Default>CUSTOM_ERROR_MESSAGE</Default>
+</Literal>
+</Declarations>
+<Code Language="SQL"><![CDATA[DECLARE @new_error_num INT = (SELECT MAX(error) + 1 FROM master.dbo.sysmessages WHERE error >= 50000);
+EXEC master.dbo.sp_addmessage @msgnum = @new_error_num, @severity = 16, @msgtext = '
+$ERROR_MESSAGE$
+';
+RAISERROR(@new_error_num, 16, 1);
+EXEC master.dbo.sp_dropmessage @msgnum = @new_error_num;]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

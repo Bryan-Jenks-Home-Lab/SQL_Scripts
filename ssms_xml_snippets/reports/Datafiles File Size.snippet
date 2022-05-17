@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Database File Size</Title>
+<Shortcut></Shortcut>
+<Description>Present a report on all of the databases and their file sizes on the entire server.</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+</Declarations>
+<Code Language="SQL"><![CDATA[IF OBJECT_ID('tempdb.dbo.#space') IS NOT NULL
+DROP TABLE #space
+
+CREATE TABLE #space (
+Database_ID INT PRIMARY KEY,
+Data_Used_Size DECIMAL(18, 2),
+Log_Used_Size DECIMAL(18 ,2)
+)
+
+DECLARE @SQL NVARCHAR(MAX) = STUFF((
+SELECT '
+USE [' + d.Name + ']
+INSERT INTO #space (Database_ID, Data_Used_Size, Log_Used_Size)
+SELECT
+DB_ID(),
+SUM(CASE WHEN [type] = 0 THEN Space_Used END),
+SUM(CASE WHEN [type] = 1 THEN Space_Used END)
+FROM (
+SELECT 
+s.[type], 
+Space_Used = SUM(FILEPROPERTY(s.Name, ''SpaceUsed'') * 8. / 1024)
+FROM sys.database_files AS s
+GROUP BY s.[type]
+) AS t;'
+FROM sys.databases AS d
+WHERE 1 = 1
+AND d.[state] = 0
+FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '')
+
+EXEC sys.sp_executesql @SQL
+
+SELECT
+d.Database_ID,
+d.Name,
+d.State_Desc,
+d.Recovery_Model_Desc,
+'Megabytes' AS 'Unit_of_Measurement',
+t.Total_Size,
+t.Data_Size,
+s.Data_Used_Size,
+t.Log_Size,
+s.Log_Used_Size,
+bu.Full_Last_Date,
+bu.Full_Size,
+bu.Log_Last_Date,
+bu.Log_Size
+FROM (
+SELECT
+Database_ID,
+Log_Size = CAST(SUM(CASE WHEN [type] = 1 THEN size END) * 8. / 1024 AS DECIMAL(18, 2)),
+Data_Size = CAST(SUM(CASE WHEN [type] = 0 THEN size END) * 8. / 1024 AS DECIMAL(18, 2)),
+Total_Size = CAST(SUM(size) * 8. / 1024 AS DECIMAL(18, 2))
+FROM sys.master_files
+GROUP BY Database_ID
+) AS t
+JOIN sys.databases d ON d.Database_ID = t.Database_ID
+LEFT JOIN #space s ON d.Database_ID = s.Database_ID
+LEFT JOIN (
+SELECT
+Database_Name,
+Full_Last_Date = MAX(CASE WHEN [type] = 'D' THEN Backup_Finish_Date END),
+Full_Size      = MAX(CASE WHEN [type] = 'D' THEN Backup_Size END),
+Log_Last_Date  = MAX(CASE WHEN [type] = 'L' THEN Backup_Finish_Date END),
+Log_Size       = MAX(CASE WHEN [type] = 'L' THEN Backup_Size END)
+FROM (
+SELECT
+s.Database_Name,
+s.[type],
+s.Backup_Finish_Date,
+Backup_Size = CAST(
+CASE WHEN s.Backup_Size = s.Compressed_Backup_Size
+THEN s.Backup_Size
+ELSE s.Compressed_Backup_Size
+END / 1048576.0 AS DECIMAL(18,2)
+),
+Row_Num = ROW_NUMBER() OVER (PARTITION BY s.Database_Name, s.[type] ORDER BY s.Backup_Finish_Date DESC)
+FROM msdb.dbo.backupset AS s
+WHERE 1 = 1
+AND s.[type] IN ('D', 'L')
+) AS f
+WHERE 1 = 1
+AND f.Row_Num = 1
+GROUP BY f.Database_Name
+) AS bu ON d.Name = bu.Database_Name
+ORDER BY t.Total_Size DESC
+]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>

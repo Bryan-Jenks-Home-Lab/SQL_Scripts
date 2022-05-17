@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+<CodeSnippet Format="1.0.0">
+<Header>
+<Title>Change Table Schema</Title>
+<Shortcut></Shortcut>
+<Description>Transfer a table from one schema to another</Description>
+<Author>Bryan Jenks</Author>
+<SnippetTypes><SnippetType>Expansion</SnippetType></SnippetTypes>
+</Header>
+<Snippet>
+<Declarations>
+<Literal>
+	<ID>DESTINATION_SCHEMA_NAME</ID>
+	<ToolTip>The name of the target schema</ToolTip>
+	<Default>NEW_SCHEMA</Default>
+</Literal>
+<Literal>
+	<ID>SOURCE_SCHEMA_NAME</ID>
+	<ToolTip>The name of the source schema</ToolTip>
+	<Default>dbo</Default>
+</Literal>
+<Literal>
+	<ID>TABLE_NAME</ID>
+	<ToolTip>The name of the table to move</ToolTip>
+	<Default>TBL</Default>
+</Literal>
+
+
+</Declarations>
+<Code Language="SQL"><![CDATA[ALTER SCHEMA $DESTINATION_SCHEMA_NAME$ TRANSFER $SOURCE_SCHEMA_NAME$.$TABLE_NAME$;
+GO$end$]]>
+</Code>
+</Snippet>
+</CodeSnippet>
+</CodeSnippets>
