@@ -7,6 +7,7 @@
 - <https://dba.stackexchange.com/questions/33541/how-to-keep-history-of-sql-server-stored-procedure-revisions/33544#33544>
 - `firstresponderkit.zip` in my downloads
 - <https://github.com/dataplat/dbatools>
+- [The DMV links for execution plans and SQL for DDL Triggers, etc](https://github.com/iCodeMechanic/Essentials-of-Sql-Server-Performance-for-Every-Developer/tree/master/Exercise%20Files)
 
 TODO Look into Brent Ozar and Ola Hallengren for SQL God knowledge
 TODO Look into BrentOzar.com/sp_blitz
