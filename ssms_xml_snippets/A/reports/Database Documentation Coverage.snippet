@@ -17,16 +17,13 @@
 </Header>
 <Snippet>
 <Declarations>
-	<Literal>
+<!-- 	<Literal>
 		<ID>DATABASE</ID>
 		<ToolTip>The name of the database to check for documentation coverage</ToolTip>
 		<Default>DATABASE</Default>
-	</Literal>
+	</Literal> -->
 </Declarations>
-<Code Language="SQL"><![CDATA[USE $DATABASE$;
-GO
-
-SELECT --objects AND columns
+<Code Language="SQL"><![CDATA[SELECT --objects AND columns
 CASE WHEN ob.parent_object_id>0 
 THEN CONCAT_WS('.',OBJECT_SCHEMA_NAME(ob.parent_object_id), OBJECT_NAME(ob.parent_object_id), ob.[name])
 ELSE CONCAT_WS('.', OBJECT_SCHEMA_NAME(ob.[OBJECT_ID]), ob.[name]) 
@@ -265,8 +262,7 @@ FROM sys.plan_guides AS pg
 INNER JOIN sys.extended_properties AS ep
 ON class = 27
 AND ep.major_id = pg.plan_guide_id
-GO
-$end$]]>
+GO]]>
 </Code>
 </Snippet>
 </CodeSnippet>
