@@ -38,3 +38,8 @@ Paid
 - $179 <https://www.red-gate.com/products/sql-development/sql-prompt/#format-sql>
  
 - $1099 All necessary things <https://www.red-gate.com/products/sql-development/sql-toolbelt-essentials/>
+
+SSIS
+
+- <https://github.com/yorek/ssis-dashboard>
+ - <https://github.com/OsirisDBA/grafana-ssisdashboard)
